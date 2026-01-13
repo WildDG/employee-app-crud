@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="employeeApp">
+  <head>
+    <meta charset="UTF-8">
+    <title>Employee App</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <script src="app.js"></script>
+    <script src="services/employeeService.js"></script>
+    <script src="controllers/employeeController.js"></script>
+  </head>
+
+  <body ng-controller="EmployeeController" class="bg-gray-100 p-6">
+
+  <div class="max-w-5xl mx-auto bg-white p-6 rounded shadow">
+
+    <div class="flex justify-between mb-4">
+      <h2 class="text-xl font-bold">Employee List</h2>
+      <button
+        ng-click="openAdd()"
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        + Add Employee
+      </button>
+    </div>
+
+    <table class="w-full border">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="border p-2">Name</th>
+          <th class="border p-2">Position</th>
+          <th class="border p-2">Salary</th>
+          <th class="border p-2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="emp in employees">
+          <td class="border p-2">{{ emp.Name }}</td>
+          <td class="border p-2">{{ emp.Position }}</td>
+          <td class="border p-2">{{ emp.Salary }}</td>
+          <td class="border p-2 space-x-2 text-center">
+            <button
+              ng-click="openEdit(emp)"
+              class="bg-yellow-500 text-white px-3 py-1 rounded">
+              Edit
+            </button>
+            <button
+              ng-click="delete(emp.EmployeeID)"
+              class="bg-red-600 text-white px-3 py-1 rounded">
+              Delete
+            </button>
+          </td>
+        </tr>
+        <tr ng-if="employees.length === 0">
+          <td colspan="4" class="text-center p-4 text-gray-500">
+            No data available
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    ng-show="showModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+
+    <div class="bg-white w-96 p-6 rounded shadow">
+      <h3 class="text-lg font-semibold mb-4">
+        {{ isEdit ? 'Edit' : 'Add' }} Employee
+      </h3>
+
+      <input class="border w-full p-2 mb-3" placeholder="Name" ng-model="form.name">
+      <input class="border w-full p-2 mb-3" placeholder="Position" ng-model="form.position">
+      <input class="border w-full p-2 mb-3" placeholder="Salary" type="number" ng-model="form.salary">
+
+      <div class="flex justify-end gap-2">
+        <button ng-click="close()" class="border px-4 py-2 rounded">Cancel</button>
+        <button
+          ng-click="save()"
+          ng-disabled="loading"
+          class="bg-blue-600 text-white px-4 py-2 rounded">
+          {{ loading ? 'Saving...' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  </body>
+</html>
